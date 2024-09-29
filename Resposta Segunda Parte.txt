@@ -1,0 +1,30 @@
+Partindo das premissas:
+     O dataset: cleaned_dataset.csv no SQL seria nomeado como "CotacaoDebentures"
+     O banco utilizado é o SQL Server
+
+1. Retorne a quantidade de debêntures listadas no dia anterior.
+
+SELECT COUNT(*)
+FROM CotacaoDebentures
+WHERE data = CONVERT(DATE, DATEADD(DAY, -1, GETDATE()));
+
+2. Retorne a duration média de todas as debêntures em cada um dos últimos 5 dias úteis.
+
+
+SELECT d.data, AVG(d.[Taxa Indicativa]) AS avg_taxa_indicativa
+FROM CotacaoDebentures d
+WHERE d.data IN (
+    SELECT DISTINCT TOP 5 data
+    FROM CotacaoDebentures
+    ORDER BY data DESC
+)
+GROUP BY d.data
+ORDER BY d.data DESC;
+
+
+3. Busque os códigos únicos de todas as debêntures da empresa “VALE S/A”.
+
+SELECT DISTINCT codigo
+FROM CotacaoDebentures
+WHERE nome LIKE '%VALE S/A%';
+
